@@ -1,0 +1,26 @@
+{
+  "name": "stremio-downloader",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager ./ --out=./packages --icon=./packaging/icons/downloader --ignore=\"tools|docs|webpackConfig|lock|public/\""
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy": "^1.18.0",
+    "get-port": "^5.0.0",
+    "request": "^2.88.0",
+    "mime-types": "^2.1.24",
+    "easy-ffmpeg": "^0.0.15",
+    "async": "^3.1.0",
+    "nanoid": "^2.1.1"
+  },
+  "devDependencies": {
+    "electron": "^6.0.10",
+    "electron-packager": "^14.0.6"
+  },
+  "engines": {
+    "node": "8.10.0"
+  }
+}
