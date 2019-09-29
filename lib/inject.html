@@ -1,0 +1,70 @@
+<div id="download-toast" style="cursor: pointer"><div id="download-toast-img"><img src="https://lh3.googleusercontent.com/I5uvzsai-Vzbcf9AQA0OhlziOnorx3n_DLnAik7oU_NopxME22IUv4f8xljYd8-lTg=w300" width="40" height="40"></div><div id="download-toast-desc"></div></div>
+<script>
+
+	function launch_toast(msg) {
+		$('#download-toast-desc').text(msg)
+		$('#download-toast').animate({ bottom: '30px', opacity: 1 }, 500, () => {
+			const toastWidth = $('#download-toast-desc').get(0).scrollWidth + 50
+			$('#download-toast').animate({ minWidth: toastWidth + 'px' }, 500, () => {
+				setTimeout(() => {
+					$('#download-toast').animate({ minWidth: '50px' }, 500, () => {
+						$('#download-toast').animate({ bottom: '0px', opacity: 0, visibility: 'hidden' }, 500, () => {
+						})
+					})
+				}, 9000)
+			})
+		})
+	}
+
+	(function () {
+
+		$('#download-toast').click(() => {
+			let url = window.location.href
+			const streamId = url.split('/')[10]
+			url = url.split('/web/')[0] + '/api?method=focus-window'
+			fetch(url)
+		})
+
+		const css = '#download-toast{max-width:50px;height:50px;margin:auto;background-color:#333;color:#fff;text-align:center;border-radius:2px;position:fixed;z-index:1;left:0;right:0;bottom:0;font-size:17px;white-space:nowrap;overflow:hidden;opacity:0}#download-toast-img{width:50px;height:50px;float:left;padding-top:5px;padding-bottom:5px;box-sizing:border-box;background-color:#111;color:#fff}#download-toast-desc{font-weight:normal;color:#fff;padding:16px;overflow:hidden;white-space:nowrap}',
+			head = document.head || document.getElementsByTagName('head')[0],
+			style = document.createElement('style')
+
+		head.appendChild(style)
+
+		style.type = 'text/css'
+		if (style.styleSheet) {
+		  // This is required for IE8 and below.
+		  style.styleSheet.cssText = css
+		} else {
+		  style.appendChild(document.createTextNode(css))
+		}
+
+		var log = console.info;
+		console.info = async function () {
+			const text = arguments[0]
+			if (text.includes('Player starting URL:')) {
+				let videoUrl = text.split('Player starting URL: ')[1].split(' ')[0]
+				const title = $('#windowTitle').text().trim()
+				if (videoUrl.startsWith('http://127.0.0.1:') && videoUrl.endsWith('/hls.m3u8'))
+					videoUrl = videoUrl.replace('/hls.m3u8', '/')
+				let url = window.location.href
+				const streamId = url.split('/')[10]
+				const metaUrl = window.lastMetaUrl || ''
+				let metaId =''
+				let metaType = ''
+				if (metaUrl && metaUrl.includes('/')) {
+					let parts = metaUrl.split('/')
+					metaId = parts.pop()
+					metaId = metaId.replace('.json', '')
+					metaType = parts.pop()
+				}
+				url = url.split('/web/')[0] + '/api?method=add-download&url=' + encodeURIComponent(videoUrl) + '&title=' + encodeURIComponent(title) + '&streamId=' + encodeURIComponent(streamId) + '&metaUrl=' + encodeURIComponent(metaUrl) + '&metaId=' + encodeURIComponent(metaId) + '&metaType=' + encodeURIComponent(metaType) 
+				window.history.back()
+				const response = await fetch(url)
+				const downUrl = await response.text()
+				launch_toast('Started downloading ' + downUrl)
+			}
+			log.apply(this, Array.prototype.slice.call(arguments));
+		};
+	}());
+</script>

@@ -1,0 +1,11 @@
+<script>
+let oldFetch = fetch
+function newFetch() {
+	const url = arguments[0] || ''
+	if (url.includes('/meta/') && url.endsWith('.json'))
+		window.lastMetaUrl = url
+    return oldFetch.apply(this, arguments);
+}
+fetch = newFetch
+window.fetch = newFetch
+</script>
