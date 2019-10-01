@@ -18,7 +18,7 @@ function createWindow () {
     minHeight: 600
   })
 
-  mainWindow.removeMenu()
+  mainWindow.setMenuBarVisibility(false)
 
   let urls = { }
 
