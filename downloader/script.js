@@ -12,23 +12,23 @@ function fileToRow(file, idx) {
 		'<td class="actions">'
 
 	str += '' +
-		'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick="apiCall(\'remove-download\', \''+file.url+'\', \''+file.filename+'\')">' +
+		'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" onClick="apiCall(\'remove-download\', \''+file.url+'\', \''+encodeURIComponent(file.filename)+'\')">' +
 			'<i class="material-icons">delete</i>' +
 		'</button>'
 
 	if (file.finished) {
 		str += '' +
-			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="fileOptions(\''+file.url+'\', \''+file.filename+'\')">' +
+			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="fileOptions(\''+file.url+'\', \''+encodeURIComponent(file.filename)+'\')">' +
 				'<i class="material-icons">menu</i>' +
 			'</button>'
 	} else if (file.error || file.stopped) {
 		str += '' +
-			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="apiCall(\'restart-download\', \''+file.url+'\', \''+file.filename+'\')">' +
+			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="apiCall(\'restart-download\', \''+file.url+'\', \''+encodeURIComponent(file.filename)+'\')">' +
 				'<i class="material-icons">refresh</i>' +
 			'</button>'
 	} else {
 		str += '' +
-			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="apiCall(\'stop-download\', \''+file.url+'\', \''+file.filename+'\')">' +
+			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="apiCall(\'stop-download\', \''+file.url+'\', \''+encodeURIComponent(file.filename)+'\')">' +
 				'<i class="material-icons">stop</i>' +
 			'</button>'
 	}
@@ -40,7 +40,7 @@ function fileToRow(file, idx) {
 	return str
 }
 
-function options(url,) {
+function options(url) {
 	let str = '<div>' +
 		'<button class="mdl-button mdl-js-button mdl-button--raised" onClick="apiCall(\'open-folder\')">' +
 			'Open Download Folder' +
@@ -190,6 +190,7 @@ $(document).ready(() => {
 })
 
 function apiCall(method, url, filename) {
+	filename = decodeURIComponent(filename)
 	request(method, url, filename)
 	closeDialog()	
 }
