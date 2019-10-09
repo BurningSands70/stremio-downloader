@@ -1,8 +1,9 @@
 <script>
 let oldFetch = fetch
+const currentHost = window.location.protocol + '//' + window.location.host + '/'
 function newFetch() {
 	const url = arguments[0] || ''
-	if (url.includes('/meta/') && url.endsWith('.json'))
+	if (!url.startsWith(currentHost) && url.includes('/meta/') && url.endsWith('.json'))
 		window.lastMetaUrl = url
     return oldFetch.apply(this, arguments);
 }
