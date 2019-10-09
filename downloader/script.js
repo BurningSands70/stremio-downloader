@@ -16,15 +16,15 @@ function fileToRow(file, idx) {
 			'<i class="material-icons">delete</i>' +
 		'</button>'
 
-	if (file.finished) {
-		str += '' +
-			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="fileOptions(\''+file.url+'\', \''+encodeURIComponent(file.filename).replace(/'/g, "%27")+'\')">' +
-				'<i class="material-icons">menu</i>' +
-			'</button>'
-	} else if (file.error || file.stopped) {
+	if (file.error || file.stopped) {
 		str += '' +
 			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="apiCall(\'restart-download\', \''+file.url+'\', \''+encodeURIComponent(file.filename).replace(/'/g, "%27")+'\')">' +
 				'<i class="material-icons">refresh</i>' +
+			'</button>'
+	} else if (file.finished) {
+		str += '' +
+			'<button class="mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab" style="margin-left: 14px; margin-right: 0" onClick="fileOptions(\''+file.url+'\', \''+encodeURIComponent(file.filename).replace(/'/g, "%27")+'\')">' +
+				'<i class="material-icons">menu</i>' +
 			'</button>'
 	} else {
 		str += '' +
