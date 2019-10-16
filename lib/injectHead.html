@@ -1,19 +1,22 @@
 <script>
 let oldFetch = fetch
 function newFetch() {
-    const url = arguments[0] || ''
-    if (url.includes('/meta/') && url.endsWith('.json'))
-        return new Promise((resolve, reject) => {
-            (oldFetch.apply(this, arguments)).then(async (resp) => {
-                if (resp.status == 200)
-                    window.lastMetaUrl = url
-                resolve(resp)
-            }).catch((err) => {
-                reject(err)
-            })
-        })
-    else
-        return oldFetch.apply(this, arguments)
+   const url = arguments[0] || ''
+   if (url.includes('/meta/') && url.endsWith('.json'))
+       return new Promise(async (resolve, reject) => {
+           (oldFetch.apply(this, arguments)).then(async (resp) => {
+               if (resp.status == 200) {
+                   const body = await resp.clone().text()
+                   if ((body || '').length > 2)
+                       window.lastMetaUrl = url
+               }
+               resolve(resp)
+           }).catch((err) => {
+               reject(err)
+           })
+       })
+   else
+       return oldFetch.apply(this, arguments)
 }
 fetch = newFetch
 window.fetch = newFetch
